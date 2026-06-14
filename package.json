@@ -14,6 +14,7 @@
     "dexie": "^4.4.3",
     "dexie-react-hooks": "^4.4.0",
     "lucide-react": "^1.17.0",
+    "material-symbols": "^0.45.1",
     "next": "16.2.9",
     "radix-ui": "^1.5.0",
     "react": "19.2.4",
