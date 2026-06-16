@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { gooeyToast } from "goey-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function Auth() {
+  const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [registerPassword, setRegisterPassword] = useState("");
@@ -18,9 +21,79 @@ export default function Auth() {
   const [emailStatus, setEmailStatus] = useState<
     "available" | "taken" | "invalid" | null
   >(null);
-  
+
   // State for layout animation: true = Login, false = Register
   const [isLogin, setIsLogin] = useState(true);
+
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            email: loginEmail,
+            password: loginPassword,
+          }),
+        },
+      );
+
+      if (res.ok) {
+        gooeyToast.success("Berhasil login");
+        router.push("/test");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const errorMessage =
+          data.message || data.error || `HTTP error! status: ${res.status}`;
+        gooeyToast.error("Gagal login", { description: errorMessage });
+      }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      gooeyToast.error("Gagal login", { description: msg });
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: username,
+            email: email,
+            password: registerPassword,
+            password_confirmation: registerConfirmPassword,
+          }),
+        },
+      );
+
+      if (res.ok) {
+        setIsLogin(true);
+        setTimeout(() => {
+          gooeyToast.success("Berhasil register");
+        }, 500);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const errorMessage =
+          data.message || data.error || `HTTP error! status: ${res.status}`;
+        gooeyToast.error("Gagal register", { description: errorMessage });
+      }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      gooeyToast.error("Gagal register", { description: msg });
+    }
+  };
 
   const handleEmailBlur = () => {
     if (!email) {
@@ -57,38 +130,54 @@ export default function Auth() {
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-white flex">
       {/* YELLOW PANEL */}
-      <div 
-        className={`absolute top-0 h-screen w-[775px] transition-transform duration-1000 ease-in-out z-20 bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden ${isLogin ? 'translate-x-0' : 'translate-x-[calc(100vw-775px)]'}`}
+      <div
+        className={`absolute top-0 h-screen w-193.75 transition-transform duration-1000 ease-in-out z-20 bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden ${isLogin ? "translate-x-0" : "translate-x-[calc(100vw-775px)]"}`}
       >
         {/* SHAPES */}
         {/* Shape 1 */}
-        <div 
+        <div
           className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
-            ${isLogin 
-              ? 'w-100 h-[588.27px] -left-35 -top-42 rotate-[-28deg]' 
-              : 'w-132 h-132 left-3 -top-12 rotate-45'}`} 
+            ${
+              isLogin
+                ? "w-100 h-[588.27px] -left-35 -top-42 rotate-[-28deg]"
+                : "w-132 h-132 left-3 -top-12 rotate-45"
+            }`}
         >
-           <div className={`absolute inset-0 bg-linear-to-b from-yellow-300 from-60% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? 'opacity-100' : 'opacity-0'}`} />
-           <div className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-55% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? 'opacity-100' : 'opacity-0'}`} />
+          <div
+            className={`absolute inset-0 bg-linear-to-b from-yellow-300 from-60% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? "opacity-100" : "opacity-0"}`}
+          />
+          <div
+            className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-55% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? "opacity-100" : "opacity-0"}`}
+          />
         </div>
         {/* Shape 2 */}
-        <div 
+        <div
           className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
-            ${isLogin
-              ? 'w-75 h-87.5 left-155 top-66 -rotate-45'
-              : 'w-75 h-87.5 left-116 top-22 -rotate-70'}`} 
+            ${
+              isLogin
+                ? "w-75 h-87.5 left-155 top-66 -rotate-45"
+                : "w-75 h-87.5 left-116 top-22 -rotate-70"
+            }`}
         >
-           <div className={`absolute inset-0 bg-linear-to-tl from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out opacity-100`} />
+          <div
+            className={`absolute inset-0 bg-linear-to-tl from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out opacity-100`}
+          />
         </div>
         {/* Shape 3 */}
-        <div 
+        <div
           className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
-            ${isLogin
-              ? 'w-75 h-87.5 -left-5 top-113.75 rotate-18'
-              : 'w-75 h-87.5 left-92 top-136 -rotate-8'}`} 
+            ${
+              isLogin
+                ? "w-75 h-87.5 -left-5 top-113.75 rotate-18"
+                : "w-75 h-87.5 left-92 top-136 -rotate-8"
+            }`}
         >
-           <div className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? 'opacity-100' : 'opacity-0'}`} />
-           <div className={`absolute inset-0 bg-linear-to-t from-yellow-300 from-50% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? 'opacity-100' : 'opacity-0'}`} />
+          <div
+            className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? "opacity-100" : "opacity-0"}`}
+          />
+          <div
+            className={`absolute inset-0 bg-linear-to-t from-yellow-300 from-50% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? "opacity-100" : "opacity-0"}`}
+          />
         </div>
 
         <div className="relative z-20 h-full flex flex-col">
@@ -98,8 +187,8 @@ export default function Auth() {
             </div>
           </div>
           <div className="relative flex-1 mt-36">
-            <div 
-              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${isLogin ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10 pointer-events-none'}`}
+            <div
+              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${isLogin ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10 pointer-events-none"}`}
             >
               <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
                 Welcome
@@ -109,13 +198,16 @@ export default function Auth() {
               </p>
               <p className="w-109 mx-auto text-center text-md font-['Poppins']">
                 Don't have an account?{" "}
-                <span className="text-[#FF5200] underline cursor-pointer" onClick={() => setIsLogin(false)}>
+                <span
+                  className="text-[#FF5200] underline cursor-pointer"
+                  onClick={() => setIsLogin(false)}
+                >
                   Register
                 </span>
               </p>
             </div>
-            <div 
-              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${!isLogin ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10 pointer-events-none'}`}
+            <div
+              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${!isLogin ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10 pointer-events-none"}`}
             >
               <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
                 Get Started
@@ -125,7 +217,10 @@ export default function Auth() {
               </p>
               <p className="w-109 mx-auto text-center text-md font-['Poppins']">
                 Already have an account?{" "}
-                <span className="text-[#FF5200] underline cursor-pointer" onClick={() => setIsLogin(true)}>
+                <span
+                  className="text-[#FF5200] underline cursor-pointer"
+                  onClick={() => setIsLogin(true)}
+                >
                   Login
                 </span>
               </p>
@@ -135,13 +230,13 @@ export default function Auth() {
       </div>
 
       {/* FORMS CONTAINER */}
-      <div 
-        className={`absolute top-0 h-screen w-[calc(100vw-775px)] transition-transform duration-1000 ease-in-out z-10 ${isLogin ? 'translate-x-[775px]' : 'translate-x-0'}`}
+      <div
+        className={`absolute top-0 h-screen w-[calc(100vw-775px)] transition-transform duration-1000 ease-in-out z-10 ${isLogin ? "translate-x-193.75" : "translate-x-0"}`}
       >
         <div className="relative w-full h-full bg-white">
           {/* Login Form */}
-          <div 
-            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${isLogin ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+          <div
+            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${isLogin ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
           >
             <Card className="w-126.25 px-6 shadow-none border-none rounded-none ring-0 item-center flex flex-col">
               <CardHeader className="">
@@ -158,6 +253,8 @@ export default function Auth() {
                   <div className="h-6 w-px bg-gray-300 mr-3" />
                   <Input
                     type="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder="Input Your Email"
                     className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins']"
                   />
@@ -205,7 +302,10 @@ export default function Auth() {
                     </span>
                   </div>
                 </div>
-                <Button className="w-full bg-[#FF5700] hover:bg-[#E04E00] text-white text-2xl h-14 rounded-xl mt-4 font-['Poppins'] shadow-none cursor-pointer">
+                <Button
+                  onClick={handleLogin}
+                  className="w-full bg-[#FF5700] hover:bg-[#E04E00] text-white text-2xl h-14 rounded-xl mt-4 font-['Poppins'] shadow-none cursor-pointer"
+                >
                   Login
                 </Button>
               </CardContent>
@@ -213,8 +313,8 @@ export default function Auth() {
           </div>
 
           {/* Register Form */}
-          <div 
-            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${!isLogin ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+          <div
+            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${!isLogin ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
           >
             <Card className="w-126.25 px-6 shadow-none border-none rounded-none ring-0 item-center flex flex-col">
               <CardHeader className="">
@@ -411,7 +511,10 @@ export default function Auth() {
                     </span>
                   </div>
                 </div>
-                <Button className="w-full bg-[#FF5700] hover:bg-[#E04E00] text-white text-2xl h-14 rounded-xl mt-4 font-['Poppins'] shadow-none cursor-pointer">
+                <Button
+                  onClick={handleRegister}
+                  className="w-full bg-[#FF5700] hover:bg-[#E04E00] text-white text-2xl h-14 rounded-xl mt-4 font-['Poppins'] shadow-none cursor-pointer"
+                >
                   Register
                 </Button>
               </CardContent>
