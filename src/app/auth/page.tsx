@@ -18,6 +18,9 @@ export default function Auth() {
   const [emailStatus, setEmailStatus] = useState<
     "available" | "taken" | "invalid" | null
   >(null);
+  
+  // State for layout animation: true = Login, false = Register
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleEmailBlur = () => {
     if (!email) {
@@ -52,43 +55,83 @@ export default function Auth() {
   };
 
   return (
-    <div>
-      {/* Login */}
-      <div className="hidden">
-        <div className="w-screen h-screen flex">
-          <div className="w-193.75 h-screen relative bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden">
-            <div className="">
-              {/* Login Shapes 1 */}
-              <div className="w-100 h-[588.27px] -left-35 -top-42 absolute origin-top-left rotate-[-28deg] bg-linear-to-b from-yellow-300 from-60% to-amber-400 shadow-[5px_14px_ 50px_19px_rgba(0,0,0,0.25)] z-0" />
-              {/* Login Shapes 2 */}
-              <div className="w-75 h-87.5 left-155 top-66 absolute origin-top-left -rotate-45 bg-linear-to-tl from-yellow-300 from-70% to-amber-400 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] z-0" />
-              {/* Login Shapes 3 */}
-              <div className="w-75 h-87.5 -left-5 top-113.75 absolute origin-top-left rotate-18 bg-linear-to-tr from-yellow-300 from-70% to-amber-400 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] z-0" />
-              <div className="relative z-20">
-                <div className="flex justify-center relative top-10">
-                  <div className="w-112.5">
-                    <img src="./logo-auth.svg" alt="ShrimpChat Logo" />
-                  </div>
-                </div>
-                <div className="flex flex-col mt-36 gap-5">
-                  <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
-                    Welcome
-                  </h1>
-                  <p className="w-109 mx-auto text-center text-xl font-['Poppins']">
-                    Log in to your ShrimpChat account to connect with your
-                    friends.
-                  </p>
-                  <p className="w-109 mx-auto text-center text-md font-['Poppins']">
-                    Don't have an account?{" "}
-                    <span className="text-[#FF5200] underline cursor-pointer">
-                      Register
-                    </span>
-                  </p>
-                </div>
-              </div>
+    <div className="w-screen h-screen relative overflow-hidden bg-white flex">
+      {/* YELLOW PANEL */}
+      <div 
+        className={`absolute top-0 h-screen w-[775px] transition-transform duration-1000 ease-in-out z-20 bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden ${isLogin ? 'translate-x-0' : 'translate-x-[calc(100vw-775px)]'}`}
+      >
+        {/* SHAPES */}
+        <div 
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+            ${isLogin 
+              ? 'w-100 h-[588.27px] -left-35 -top-42 rotate-[-28deg] bg-linear-to-b from-yellow-300 from-60% to-amber-400' 
+              : 'w-132 h-132 left-3 -top-12 rotate-45 bg-linear-to-tr from-yellow-300 from-55% to-amber-400'}`} 
+        />
+        <div 
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+            ${isLogin
+              ? 'w-75 h-87.5 left-155 top-66 -rotate-45 bg-linear-to-tl from-yellow-300 from-70% to-amber-400'
+              : 'w-75 h-87.5 left-116 top-22 -rotate-70 bg-linear-to-tl from-yellow-300 from-70% to-amber-400'}`} 
+        />
+        <div 
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+            ${isLogin
+              ? 'w-75 h-87.5 -left-5 top-113.75 rotate-18 bg-linear-to-tr from-yellow-300 from-70% to-amber-400'
+              : 'w-75 h-87.5 left-92 top-136 -rotate-8 bg-linear-to-t from-yellow-300 from-50% to-amber-400'}`} 
+        />
+
+        <div className="relative z-20 h-full flex flex-col">
+          <div className="flex justify-center relative top-10 shrink-0">
+            <div className="w-112.5">
+              <img src="./logo-auth.svg" alt="ShrimpChat Logo" />
             </div>
           </div>
-          <div className="flex-1 h-screen flex flex-col justify-center items-center bg-white">
+          <div className="relative flex-1 mt-36">
+            <div 
+              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${isLogin ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10 pointer-events-none'}`}
+            >
+              <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
+                Welcome
+              </h1>
+              <p className="w-109 mx-auto text-center text-xl font-['Poppins']">
+                Log in to your ShrimpChat account to connect with your friends.
+              </p>
+              <p className="w-109 mx-auto text-center text-md font-['Poppins']">
+                Don't have an account?{" "}
+                <span className="text-[#FF5200] underline cursor-pointer" onClick={() => setIsLogin(false)}>
+                  Register
+                </span>
+              </p>
+            </div>
+            <div 
+              className={`absolute top-0 w-full flex flex-col gap-5 transition-all duration-700 ease-in-out ${!isLogin ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10 pointer-events-none'}`}
+            >
+              <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
+                Get Started
+              </h1>
+              <p className="w-109 mx-auto text-center text-xl font-['Poppins']">
+                Create an account to connect with your community.
+              </p>
+              <p className="w-109 mx-auto text-center text-md font-['Poppins']">
+                Already have an account?{" "}
+                <span className="text-[#FF5200] underline cursor-pointer" onClick={() => setIsLogin(true)}>
+                  Login
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FORMS CONTAINER */}
+      <div 
+        className={`absolute top-0 h-screen w-[calc(100vw-775px)] transition-transform duration-1000 ease-in-out z-10 ${isLogin ? 'translate-x-[775px]' : 'translate-x-0'}`}
+      >
+        <div className="relative w-full h-full bg-white">
+          {/* Login Form */}
+          <div 
+            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${isLogin ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+          >
             <Card className="w-126.25 px-6 shadow-none border-none rounded-none ring-0 item-center flex flex-col">
               <CardHeader className="">
                 <h1 className="text-center text-black text-4xl font-extrabold font-['Poppins']">
@@ -157,12 +200,11 @@ export default function Auth() {
               </CardContent>
             </Card>
           </div>
-        </div>
-      </div>
-      {/* Register */}
-      <div className="">
-        <div className="w-screen h-screen flex">
-          <div className="flex-1 h-screen flex flex-col justify-center items-center bg-white">
+
+          {/* Register Form */}
+          <div 
+            className={`absolute inset-0 flex flex-col justify-center items-center bg-white transition-all duration-700 ease-in-out ${!isLogin ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+          >
             <Card className="w-126.25 px-6 shadow-none border-none rounded-none ring-0 item-center flex flex-col">
               <CardHeader className="">
                 <h1 className="text-center text-black text-4xl font-extrabold font-['Poppins']">
@@ -363,37 +405,6 @@ export default function Auth() {
                 </Button>
               </CardContent>
             </Card>
-          </div>
-          <div className="w-193.75 h-screen relative bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden">
-            <div className="">
-              {/* Register Shapes 1 */}
-              <div className="w-132 h-132 left-3 -top-12 absolute origin-top-left rotate-45 bg-linear-to-tr from-yellow-300 from-55% to-amber-400 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] z-0" />
-              {/* Register Shapes 2 */}
-              <div className="w-75 h-87.5 left-116 top-22 absolute origin-top-left -rotate-70 bg-linear-to-tl from-yellow-300 from-70% to-amber-400 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] z-0" />
-              {/* Register Shapes 3 */}
-              <div className="w-75 h-87.5 left-92 top-136 absolute origin-top-left -rotate-8 bg-linear-to-t from-yellow-300 from-50% to-amber-400 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] z-0" />
-              <div className="relative z-20">
-                <div className="flex justify-center relative top-10">
-                  <div className="w-112.5">
-                    <img src="./logo-auth.svg" alt="ShrimpChat Logo" />
-                  </div>
-                </div>
-                <div className="flex flex-col mt-36 gap-5">
-                  <h1 className="justify-center text-center text-black text-4xl font-extrabold font-['Poppins'] [text-shadow:0px_5px_7px_rgb(0_0_0/0.25)]">
-                    Get Started
-                  </h1>
-                  <p className="w-109 mx-auto text-center text-xl font-['Poppins']">
-                    Create an account to connect with your community.
-                  </p>
-                  <p className="w-109 mx-auto text-center text-md font-['Poppins']">
-                    Already have an account?{" "}
-                    <span className="text-[#FF5200] underline cursor-pointer">
-                      Login
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
