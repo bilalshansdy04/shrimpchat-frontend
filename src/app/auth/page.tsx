@@ -61,24 +61,35 @@ export default function Auth() {
         className={`absolute top-0 h-screen w-[775px] transition-transform duration-1000 ease-in-out z-20 bg-amber-300 shadow-[-22px_-1px_34.5px_0px_rgba(255,222,90,0.25)] overflow-hidden ${isLogin ? 'translate-x-0' : 'translate-x-[calc(100vw-775px)]'}`}
       >
         {/* SHAPES */}
+        {/* Shape 1 */}
         <div 
-          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
             ${isLogin 
-              ? 'w-100 h-[588.27px] -left-35 -top-42 rotate-[-28deg] bg-linear-to-b from-yellow-300 from-60% to-amber-400' 
-              : 'w-132 h-132 left-3 -top-12 rotate-45 bg-linear-to-tr from-yellow-300 from-55% to-amber-400'}`} 
-        />
+              ? 'w-100 h-[588.27px] -left-35 -top-42 rotate-[-28deg]' 
+              : 'w-132 h-132 left-3 -top-12 rotate-45'}`} 
+        >
+           <div className={`absolute inset-0 bg-linear-to-b from-yellow-300 from-60% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? 'opacity-100' : 'opacity-0'}`} />
+           <div className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-55% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? 'opacity-100' : 'opacity-0'}`} />
+        </div>
+        {/* Shape 2 */}
         <div 
-          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
             ${isLogin
-              ? 'w-75 h-87.5 left-155 top-66 -rotate-45 bg-linear-to-tl from-yellow-300 from-70% to-amber-400'
-              : 'w-75 h-87.5 left-116 top-22 -rotate-70 bg-linear-to-tl from-yellow-300 from-70% to-amber-400'}`} 
-        />
+              ? 'w-75 h-87.5 left-155 top-66 -rotate-45'
+              : 'w-75 h-87.5 left-116 top-22 -rotate-70'}`} 
+        >
+           <div className={`absolute inset-0 bg-linear-to-tl from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out opacity-100`} />
+        </div>
+        {/* Shape 3 */}
         <div 
-          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0
+          className={`absolute origin-top-left transition-all duration-1000 ease-in-out z-0 shadow-[5px_14px_50px_19px_rgba(0,0,0,0.25)] overflow-hidden
             ${isLogin
-              ? 'w-75 h-87.5 -left-5 top-113.75 rotate-18 bg-linear-to-tr from-yellow-300 from-70% to-amber-400'
-              : 'w-75 h-87.5 left-92 top-136 -rotate-8 bg-linear-to-t from-yellow-300 from-50% to-amber-400'}`} 
-        />
+              ? 'w-75 h-87.5 -left-5 top-113.75 rotate-18'
+              : 'w-75 h-87.5 left-92 top-136 -rotate-8'}`} 
+        >
+           <div className={`absolute inset-0 bg-linear-to-tr from-yellow-300 from-70% to-amber-400 transition-opacity duration-1000 ease-in-out ${isLogin ? 'opacity-100' : 'opacity-0'}`} />
+           <div className={`absolute inset-0 bg-linear-to-t from-yellow-300 from-50% to-amber-400 transition-opacity duration-1000 ease-in-out ${!isLogin ? 'opacity-100' : 'opacity-0'}`} />
+        </div>
 
         <div className="relative z-20 h-full flex flex-col">
           <div className="flex justify-center relative top-10 shrink-0">
