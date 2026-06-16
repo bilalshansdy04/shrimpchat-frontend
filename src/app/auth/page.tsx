@@ -5,8 +5,11 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function Auth() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [usernameStatus, setUsernameStatus] = useState<"available" | "taken" | null>(null);
   const [email, setEmail] = useState("");
@@ -91,7 +94,7 @@ export default function Auth() {
                   <Input
                     type="email"
                     placeholder="Input Your Email"
-                    className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light"
+                    className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins']"
                   />
                 </div>
                 <div className="flex items-center bg-white border border-gray-100 shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4">
@@ -101,22 +104,22 @@ export default function Auth() {
                   </span>
                   <div className="h-6 w-px bg-gray-300 mr-3" />
                   <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    type={showLoginPassword ? "text" : "password"}
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder="Input Your Password"
-                    className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light bg-transparent"
+                    className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins'] bg-transparent"
                   />
                 </div>
                 <div className="mt-1">
                   <div
                     className="flex items-center space-x-2 cursor-pointer w-fit"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
                   >
                     <div
-                      className={`w-5 h-5 flex items-center justify-center rounded-sm transition-colors ${showPassword ? "bg-[#FF5700]" : "bg-white border border-gray-300"}`}
+                      className={`w-5 h-5 flex items-center justify-center rounded-sm transition-colors ${showLoginPassword ? "bg-[#FF5700]" : "bg-white border border-gray-300"}`}
                     >
-                      {showPassword && (
+                      {showLoginPassword && (
                         <svg
                           className="w-3.5 h-3.5 text-white"
                           fill="none"
@@ -172,7 +175,7 @@ export default function Auth() {
                         setUsernameStatus(null);
                       }}
                       placeholder="Input Your Username"
-                      className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light"
+                      className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins']"
                     />
                     <h6 
                       className={`text-sm font-['Poppins'] cursor-pointer transition-colors select-none ${usernameStatus === 'taken' ? 'text-red-500' : usernameStatus === 'available' ? 'text-green-500' : 'text-[#FF5700]'}`}
@@ -205,7 +208,7 @@ export default function Auth() {
                       }}
                       onBlur={handleEmailBlur}
                       placeholder="Input Your Email"
-                      className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light"
+                      className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins']"
                     />
                     {emailStatus === 'available' && (
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
@@ -232,38 +235,52 @@ export default function Auth() {
                   </span>
                   <div className="h-6 w-px bg-gray-300 mr-3" />
                   <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    type={showRegisterPassword ? "text" : "password"}
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
                     placeholder="Input Your Password"
-                    className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light bg-transparent"
+                    className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins'] bg-transparent"
                   />
                 </div>
                 {/* Confirm Password */}
-                <div className="flex items-center bg-white border border-gray-100 shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4">
-                  <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#FF5700] rounded-r-xl" />
-                  <span className="material-symbols-outlined text-gray-500 px-3">
-                    key
-                  </span>
-                  <div className="h-6 w-px bg-gray-300 mr-3" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Input Your Confirm Password"
-                    className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light bg-transparent"
-                  />
+                <div>
+                  <div className={`flex items-center bg-white border ${registerConfirmPassword.length > 0 ? (registerPassword === registerConfirmPassword ? 'border-green-500' : 'border-red-500') : 'border-gray-100'} shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4 transition-colors`}>
+                    <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#FF5700] rounded-r-xl" />
+                    <span className={`material-symbols-outlined px-3 ${registerConfirmPassword.length > 0 ? (registerPassword === registerConfirmPassword ? 'text-green-500' : 'text-red-500') : 'text-gray-500'} transition-colors`}>
+                      key
+                    </span>
+                    <div className="h-6 w-px bg-gray-300 mr-3" />
+                    <input
+                      type={showRegisterPassword ? "text" : "password"}
+                      value={registerConfirmPassword}
+                      onChange={(e) => setRegisterConfirmPassword(e.target.value)}
+                      placeholder="Input Your Confirm Password"
+                      className="w-full border-none focus:outline-none p-0 text-sm placeholder:text-gray-400 h-full text-black font-light font-['Poppins'] bg-transparent"
+                    />
+                    {registerConfirmPassword.length > 0 && registerPassword === registerConfirmPassword && (
+                      <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                    )}
+                    {registerConfirmPassword.length > 0 && registerPassword !== registerConfirmPassword && (
+                      <span className="material-symbols-outlined text-red-500 text-lg">cancel</span>
+                    )}
+                  </div>
+                  {registerConfirmPassword.length > 0 && registerPassword !== registerConfirmPassword && (
+                    <p className="text-red-500 text-xs mt-1 ml-1 font-['Poppins']">Passwords do not match.</p>
+                  )}
+                  {registerConfirmPassword.length > 0 && registerPassword === registerConfirmPassword && (
+                    <p className="text-green-500 text-xs mt-1 ml-1 font-['Poppins']">Passwords match.</p>
+                  )}
                 </div>
                 {/* Show Password */}
                 <div className="mt-1">
                   <div
                     className="flex items-center space-x-2 cursor-pointer w-fit"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowRegisterPassword(!showRegisterPassword)}
                   >
                     <div
-                      className={`w-5 h-5 flex items-center justify-center rounded-sm transition-colors ${showPassword ? "bg-[#FF5700]" : "bg-white border border-gray-300"}`}
+                      className={`w-5 h-5 flex items-center justify-center rounded-sm transition-colors ${showRegisterPassword ? "bg-[#FF5700]" : "bg-white border border-gray-300"}`}
                     >
-                      {showPassword && (
+                      {showRegisterPassword && (
                         <svg
                           className="w-3.5 h-3.5 text-white"
                           fill="none"
