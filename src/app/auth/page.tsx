@@ -9,6 +9,26 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [usernameStatus, setUsernameStatus] = useState<"available" | "taken" | null>(null);
+  const [email, setEmail] = useState("");
+  const [emailStatus, setEmailStatus] = useState<"available" | "taken" | "invalid" | null>(null);
+
+  const handleEmailBlur = () => {
+    if (!email) {
+      setEmailStatus(null);
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailStatus("invalid");
+      return;
+    }
+    const takenEmails = ["test@gmail.com", "admin@shrimpchat.com", "user@yahoo.com"];
+    if (takenEmails.includes(email.toLowerCase())) {
+      setEmailStatus("taken");
+    } else {
+      setEmailStatus("available");
+    }
+  };
 
   const handleCheckUsername = () => {
     if (!username) return;
@@ -169,17 +189,40 @@ export default function Auth() {
                   )}
                 </div>
                 {/* Email */}
-                <div className="flex items-center bg-white border border-gray-100 shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4">
-                  <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#FF5700] rounded-r-xl" />
-                  <span className="material-symbols-outlined text-gray-500 px-3">
-                    mail
-                  </span>
-                  <div className="h-6 w-px bg-gray-300 mr-3" />
-                  <Input
-                    type="email"
-                    placeholder="Input Your Email"
-                    className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light"
-                  />
+                <div>
+                  <div className={`flex items-center bg-white border ${emailStatus === 'taken' || emailStatus === 'invalid' ? 'border-red-500' : emailStatus === 'available' ? 'border-green-500' : 'border-gray-100'} shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4 transition-colors`}>
+                    <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#FF5700] rounded-r-xl" />
+                    <span className={`material-symbols-outlined px-3 ${emailStatus === 'taken' || emailStatus === 'invalid' ? 'text-red-500' : emailStatus === 'available' ? 'text-green-500' : 'text-gray-500'} transition-colors`}>
+                      mail
+                    </span>
+                    <div className="h-6 w-px bg-gray-300 mr-3" />
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailStatus) setEmailStatus(null);
+                      }}
+                      onBlur={handleEmailBlur}
+                      placeholder="Input Your Email"
+                      className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-sm placeholder:text-gray-400 h-full text-black font-light"
+                    />
+                    {emailStatus === 'available' && (
+                      <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                    )}
+                    {(emailStatus === 'taken' || emailStatus === 'invalid') && (
+                      <span className="material-symbols-outlined text-red-500 text-lg">cancel</span>
+                    )}
+                  </div>
+                  {emailStatus === 'taken' && (
+                    <p className="text-red-500 text-xs mt-1 ml-1 font-['Poppins']">Email is already registered.</p>
+                  )}
+                  {emailStatus === 'invalid' && (
+                    <p className="text-red-500 text-xs mt-1 ml-1 font-['Poppins']">Please enter a valid email address.</p>
+                  )}
+                  {emailStatus === 'available' && (
+                    <p className="text-green-500 text-xs mt-1 ml-1 font-['Poppins']">Email is available.</p>
+                  )}
                 </div>
                 {/* Password */}
                 <div className="flex items-center bg-white border border-gray-100 shadow-[0_4px_12px_rgba(0,0,0,0.08)] relative overflow-hidden h-14 pl-3 pr-4">
